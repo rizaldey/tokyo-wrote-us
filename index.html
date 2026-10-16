@@ -504,6 +504,15 @@ document.querySelector('.detail-close').addEventListener('click',()=>{characterD
  const originalExcerpt=excerptCard&&excerptCard.cloneNode(true);
  const originalAuthor=authorAside&&authorAside.cloneNode(true);
  let mobileExcerpt=null, mobileAuthor=null, instagramLink=null;
+ function setMobileArrowStyle(asText){
+  const tree=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
+  let node;
+  const selector="↗"+String.fromCharCode(65038);
+  while((node=tree.nextNode())){
+   if(node.parentElement&&node.parentElement.closest("script,style"))continue;
+   node.nodeValue=asText?node.nodeValue.replaceAll("↗",selector):node.nodeValue.replaceAll(selector,"↗");
+  }
+ }
  function syncMobileLayout(){
   if(mobileQuery.matches){
    if(excerptCard&&!mobileExcerpt){
@@ -548,6 +557,7 @@ document.querySelector('.detail-close').addEventListener('click',()=>{characterD
    if(mobileAuthor&&originalAuthor){mobileAuthor.replaceWith(originalAuthor);mobileAuthor=null}
    if(instagramLink){instagramLink.remove();instagramLink=null}
   }
+  setMobileArrowStyle(mobileQuery.matches);
  }
  syncMobileLayout();
  mobileQuery.addEventListener("change",syncMobileLayout);
