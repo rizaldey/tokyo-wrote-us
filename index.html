@@ -397,6 +397,9 @@ body{background:#f6f0e4!important}
   .footer>.wrap{display:flex!important;flex-direction:column;align-items:center!important;justify-content:center!important;gap:10px!important;text-align:center}
   .footer-links{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:14px}
   .mobile-instagram{display:inline-flex!important}
+  .character-head .eyebrow:after,.author-copy .eyebrow:after,.buy-section .eyebrow:after{content:" ✳︎"!important}
+  #excerpt .label-sun{font-variant-emoji:text}
+
 }
 @media(max-width:560px){
   .wrap{width:calc(100% - 30px)}
@@ -509,7 +512,7 @@ document.querySelector('.detail-close').addEventListener('click',()=>{characterD
     disclosure.className=excerptCard.className;
     const summary=document.createElement("summary");
     summary.className="excerpt-label";
-    summary.innerHTML=summarySource?summarySource.innerHTML:"A small glimpse into Ryu’s world";
+    summary.innerHTML=(summarySource?summarySource.innerHTML:"A small glimpse into Ryu’s world").replaceAll("✳","✳"+String.fromCharCode(65038));
     const body=document.createElement("div");
     body.className="excerpt-body";
     [...excerptCard.childNodes].forEach(node=>{if(node!==summarySource)body.appendChild(node)});
