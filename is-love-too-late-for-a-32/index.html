@@ -589,3 +589,18 @@ document.querySelector('.detail-close').addEventListener('click',()=>{characterD
 </script>
 </body></html>
 
+<script>
+(() => {
+  const markets = [["United States","www.amazon.com"],["Japan","www.amazon.co.jp"],["United Kingdom","www.amazon.co.uk"],["Canada","www.amazon.ca"],["Australia","www.amazon.com.au"],["Germany","www.amazon.de"],["France","www.amazon.fr"],["Italy","www.amazon.it"],["Spain","www.amazon.es"],["Netherlands","www.amazon.nl"],["Sweden","www.amazon.se"],["Poland","www.amazon.pl"],["Belgium","www.amazon.com.be"],["India","www.amazon.in"],["Singapore","www.amazon.com.sg"],["Brazil","www.amazon.com.br"],["Mexico","www.amazon.com.mx"],["United Arab Emirates","www.amazon.ae"],["Saudi Arabia","www.amazon.sa"],["Egypt","www.amazon.eg"],["Turkey","www.amazon.com.tr"],["South Africa","www.amazon.co.za"]];
+  const style=document.createElement("style");
+  style.textContent="#amazon-market-picker{width:min(460px,calc(100% - 32px));padding:30px;border:1px solid #d7c7ae;background:#fffaf0;color:#142f60;box-shadow:0 24px 70px #142f6050;font:15px/1.6 'DM Sans',sans-serif}#amazon-market-picker::backdrop{background:#142f6070;backdrop-filter:blur(3px)}#amazon-market-picker h2{font:32px/1.15 'Playfair Display',serif;margin:0 0 8px}#amazon-market-picker p{color:#40577d;margin:0 0 20px}#amazon-market-picker label{display:block;font-size:11px;letter-spacing:.15em;text-transform:uppercase}#amazon-market-picker select{display:block;width:100%;margin-top:8px;padding:13px 14px;background:#f6f0e4;color:#142f60;border:1px solid #d7c7ae;font:15px 'DM Sans',sans-serif}#amazon-market-picker .market-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:22px}#amazon-market-picker button{padding:12px 16px;border:1px solid #142f60;background:#142f60;color:#fffaf0;font:600 11px 'DM Sans',sans-serif;letter-spacing:.08em;cursor:pointer}#amazon-market-picker [data-market-cancel]{background:transparent;color:#142f60}";
+  document.head.append(style);
+  const dialog=document.createElement("dialog");dialog.id="amazon-market-picker";dialog.setAttribute("aria-labelledby","amazon-market-title");
+  dialog.innerHTML="<h2 id='amazon-market-title'>Choose your Amazon store</h2><p id='amazon-market-edition'></p><label for='amazon-market-select'>Store</label><select id='amazon-market-select'></select><div class='market-actions'><button type='button' data-market-cancel>Cancel</button><button type='button' data-market-continue>Continue to Amazon ↗</button></div>";
+  const select=dialog.querySelector("select");markets.forEach(([name,host])=>{const option=document.createElement("option");option.value=host;option.textContent=name;select.append(option)});document.body.append(dialog);
+  let edition="kindle";
+  document.querySelectorAll('a[href*="a.co/d/036FTijJ"],a[href*="a.co/d/0jjRuoHL"]').forEach(link=>link.addEventListener("click",event=>{event.preventDefault();edition=link.href.includes("036FTijJ")?"kindle":"paperback";dialog.querySelector("#amazon-market-edition").textContent="Choose a store for the "+(edition==="kindle"?"Kindle edition":"paperback")+". Availability may vary by store.";select.value="www.amazon.com";dialog.showModal()}));
+  dialog.querySelector("[data-market-cancel]").addEventListener("click",()=>dialog.close());
+  dialog.querySelector("[data-market-continue]").addEventListener("click",()=>{const host=select.value;const target=host==="www.amazon.com"?(edition==="kindle"?"https://a.co/d/036FTijJ":"https://a.co/d/0jjRuoHL"):"https://"+host+"/dp/"+(edition==="kindle"?"B0HR2QB623":"B0HR2QG5BM");window.location.assign(target)});
+})();
+</script>
