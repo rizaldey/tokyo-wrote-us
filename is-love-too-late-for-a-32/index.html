@@ -427,7 +427,7 @@ body{background:#f6f0e4!important}
   .edition-card .button{padding:10px 8px;font-size:7px;letter-spacing:.04em}
 }
 
-</style>
+@media(max-width:900px){.mobile-arrow{display:inline-block;position:relative;width:.78em;height:.78em;vertical-align:-.04em;margin-left:.08em;color:currentColor}.mobile-arrow:before{content:"";position:absolute;left:.12em;bottom:.18em;width:.54em;border-top:1.5px solid currentColor;transform:rotate(-45deg);transform-origin:left center}.mobile-arrow:after{content:"";position:absolute;top:.08em;right:.08em;width:.3em;height:.3em;border-top:1.5px solid currentColor;border-right:1.5px solid currentColor}}</style>
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Tokyo Wrote Us">
 <meta property="og:url" content="https://tokyowroteus.com/">
@@ -528,13 +528,13 @@ document.querySelector('.detail-close').addEventListener('click',()=>{characterD
  const originalExcerpt=excerptCard&&excerptCard.cloneNode(true);
  const originalAuthor=authorAside&&authorAside.cloneNode(true);
  let mobileExcerpt=null, mobileAuthor=null, instagramLink=null;
- function setMobileArrowStyle(asText){
+ function setMobileArrowStyle(asText){if(!asText)document.querySelectorAll(".mobile-arrow").forEach(arrow=>arrow.replaceWith(document.createTextNode("↗")));
   const tree=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);
   let node;
   const selector="↗"+String.fromCharCode(65038);
   while((node=tree.nextNode())){
-   if(node.parentElement&&node.parentElement.closest("script,style"))continue;
-   node.nodeValue=asText?node.nodeValue.replaceAll("↗",selector):node.nodeValue.replaceAll(selector,"↗");
+   if(node.parentElement&&node.parentElement.closest("script,style,.mobile-arrow"))continue;
+   if(asText){if(!node.nodeValue.includes("↗"))continue;const parts=node.nodeValue.split("↗");const fragment=document.createDocumentFragment();parts.forEach((part,index)=>{if(index){const arrow=document.createElement("span");arrow.className="mobile-arrow";arrow.setAttribute("aria-hidden","true");fragment.appendChild(arrow)}if(part)fragment.appendChild(document.createTextNode(part))});node.replaceWith(fragment)}else{node.nodeValue=node.nodeValue.replaceAll(selector,"↗")}
   }
  }
  function syncMobileLayout(){
@@ -587,7 +587,7 @@ document.querySelector('.detail-close').addEventListener('click',()=>{characterD
  mobileQuery.addEventListener("change",syncMobileLayout);
 })();
 </script>
-</body></html>
+<style>#amazonStorePicker{border:1px solid #d8c6a9;background:#fbf7ef;color:#193462;padding:28px;max-width:min(92vw,440px);box-shadow:0 16px 50px #142f6030}#amazonStorePicker::backdrop{background:#14233dcc}#amazonStoreForm{display:grid;gap:16px;font:inherit}#amazonStoreForm h2{margin:0;color:#193462;font:clamp(25px,6vw,34px)/1.1 Georgia,serif}#amazonStoreForm label{font-size:14px;letter-spacing:.08em;text-transform:uppercase}#amazonMarket{width:100%;min-height:48px;padding:10px;border:1px solid #d8c6a9;background:#fffdf8;color:#193462;font:inherit}#amazonStoreForm button[type=submit]{min-height:50px;border:0;background:#193462;color:#fffdf8;font:600 13px Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase}#amazonStoreClose{justify-self:end;border:0;background:none;color:#193462;font:28px/1 sans-serif}</style><dialog id="amazonStorePicker" aria-labelledby="amazonStoreTitle"><form id="amazonStoreForm"><button id="amazonStoreClose" type="button" aria-label="Close">×</button><h2 id="amazonStoreTitle">Choose your Amazon store</h2><label for="amazonMarket">Select a marketplace</label><select id="amazonMarket" required></select><button type="submit">Continue to Amazon</button></form></dialog><script>(function(){const markets=[{code:"jp",label:"Japan · Amazon.co.jp",domain:"www.amazon.co.jp",formats:["kindle","paperback"]},{code:"us",label:"United States · Amazon.com",domain:"www.amazon.com",formats:["kindle","paperback"]},{code:"uk",label:"United Kingdom · Amazon.co.uk",domain:"www.amazon.co.uk",formats:["kindle","paperback"]},{code:"ca",label:"Canada · Amazon.ca",domain:"www.amazon.ca",formats:["kindle","paperback"]},{code:"au",label:"Australia · Amazon.com.au",domain:"www.amazon.com.au",formats:["kindle","paperback"]},{code:"de",label:"Germany · Amazon.de",domain:"www.amazon.de",formats:["kindle","paperback"]},{code:"fr",label:"France · Amazon.fr",domain:"www.amazon.fr",formats:["kindle","paperback"]},{code:"it",label:"Italy · Amazon.it",domain:"www.amazon.it",formats:["kindle","paperback"]},{code:"es",label:"Spain · Amazon.es",domain:"www.amazon.es",formats:["kindle","paperback"]},{code:"nl",label:"Netherlands · Amazon.nl",domain:"www.amazon.nl",formats:["kindle","paperback"]},{code:"br",label:"Brazil · Amazon.com.br",domain:"www.amazon.com.br",formats:["kindle"]},{code:"mx",label:"Mexico · Amazon.com.mx",domain:"www.amazon.com.mx",formats:["kindle"]},{code:"in",label:"India · Amazon.in",domain:"www.amazon.in",formats:["kindle"]},{code:"pl",label:"Poland · Amazon.pl",domain:"www.amazon.pl",formats:["paperback"]},{code:"se",label:"Sweden · Amazon.se",domain:"www.amazon.se",formats:["paperback"]},{code:"ie",label:"Ireland · Amazon.ie",domain:"www.amazon.ie",formats:["paperback"]},{code:"be",label:"Belgium · Amazon.com.be",domain:"www.amazon.com.be",formats:["paperback"]}];const picker=document.getElementById("amazonStorePicker"),form=document.getElementById("amazonStoreForm"),select=document.getElementById("amazonMarket");if(!picker||!form||!select)return;let edition="kindle";function updateOptions(){select.replaceChildren(...markets.filter(store=>store.formats.includes(edition)).map(store=>{const option=document.createElement("option");option.value=store.code;option.textContent=store.label;return option}));select.value="jp"}document.addEventListener("click",function(event){const link=event.target.closest&&event.target.closest("a");if(!link)return;const href=link.href||"";if(href.includes("036FTijJ"))edition="kindle";else if(href.includes("0jjRuoHL"))edition="paperback";else return;event.preventDefault();event.stopImmediatePropagation();updateOptions();picker.showModal()},true);document.getElementById("amazonStoreClose").addEventListener("click",()=>picker.close());picker.addEventListener("click",event=>{if(event.target===picker)picker.close()});form.addEventListener("submit",function(event){event.preventDefault();const store=markets.find(item=>item.code===select.value);if(!store)return;const asin=edition==="kindle"?"B0HR2QB623":"B0HR2QG5BM";window.location.href="https://"+store.domain+"/dp/"+asin})})();</script></body></html>
 
 <script>
 (() => {
