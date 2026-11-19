@@ -43,7 +43,7 @@ document.querySelectorAll('.person button').forEach(button=>button.addEventListe
 let touchX=0;document.addEventListener('touchstart',e=>{touchX=e.changedTouches[0].screenX},{passive:true});document.addEventListener('touchend',e=>{const delta=e.changedTouches[0].screenX-touchX;if(delta>100&&touchX<50)location.href='https://tokyowroteus.com/'},{passive:true});
 </script>
 
-<script src="/assets/book-flip-transition.js" defer></script>
+<script src="/assets/book-flip-transition.js?v=sample-ripple-20261119" defer></script>
 </body>
 </html>
 <style>.nav-flip{position:fixed;left:0;top:48%;z-index:30;padding:15px 11px;background:#062d2c;color:#f6ebd6;border:1px solid rgba(238,207,163,.5);writing-mode:vertical-rl;transform:rotate(180deg);font:600 10px Arial,sans-serif;letter-spacing:.12em;text-transform:uppercase;text-decoration:none}.mobile-back{display:none}@media(max-width:760px){.nav-flip{display:none!important}.mobile-back{display:inline-flex!important;margin-top:8px}}</style>
